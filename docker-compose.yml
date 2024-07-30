@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  mysqldb:
+    image: mysql/mysql-server:latest
+    restart: always
+    environment:
+      - MYSQL_DATABASE=sistemabiblioteca
+      - MYSQL_ROOT_PASSWORD=root
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql-volume:/var/lib/mysql
+
+  spring-app:
+    image: sistemabiblioteca-backend:latest
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://localhost:3306/sistemabiblioteca?useSSL=false&createDatabaseIfNotExist=true
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+    depends_on:
+      - mysqldb
+
+  sb-front-app:
+    build:
+      context: ./sistemabiblioteca-front
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+    depends_on:
+      - spring-app
+
+volumes:
+  mysql-volume:
+    driver: local

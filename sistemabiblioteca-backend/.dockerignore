@@ -1,0 +1,7 @@
+**/docs/
+**/.git
+**/README.md
+**/CITATION.cff
+**/LICENSE
+**/.vscode
+**/.editorconfig
