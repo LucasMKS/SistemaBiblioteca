@@ -33,10 +33,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 export default function ProfilePage({ isAdmin }) {
   const [BooksList, setBooksList] = useState([]); // Lista de livros
-  const [setError] = useState(null); // Estado de erro
   const [bookData, setBookData] = useState({
     titulo: "",
     autor: "",
@@ -54,19 +54,22 @@ export default function ProfilePage({ isAdmin }) {
   const [booksPerPage] = useState(5); // Número de livros por página
   const { bookIsbn } = useParams(); // Parâmetro de ISBN do livro
   const [profileInfo, setProfileInfo] = useState({});
+  const [error, setError] = useState("");
 
   useEffect(() => {
     fetchProfileInfo();
   }, []);
 
   const fetchProfileInfo = async () => {
+    setError("");
+
     try {
       const token = localStorage.getItem("token");
       const response = await UserService.getYourProfile(token);
       loanData.alunoMatricula = response.ourUsers.matricula;
       setProfileInfo(response.ourUsers);
     } catch (error) {
-      console.error("Error fetching profile information:", error);
+      setError(response.mensagem);
     }
   };
 
@@ -115,11 +118,19 @@ export default function ProfilePage({ isAdmin }) {
     try {
       const token = localStorage.getItem("token");
       const res = await UserService.updateBook(bookData.isbn, bookData, token);
-      console.log(res);
-      fetchBooks();
+
+      if (res.statusCode === 200) {
+        fetchBooks();
+        console.log(res);
+      } else {
+        setError(res.mensagem);
+        console.log(res);
+        setTimeout(() => {
+          setError("");
+        }, 6000);
+      }
     } catch (error) {
       console.error("Erro ao atualizar livro:", error);
-      alert("Erro ao atualizar livro");
     }
   };
 
@@ -128,20 +139,32 @@ export default function ProfilePage({ isAdmin }) {
     try {
       const token = localStorage.getItem("token");
       const res = await UserService.registerBook(bookData, token);
-      console.log(res);
-      fetchBooks();
-      setBookData({
-        titulo: "",
-        autor: "",
-        isbn: "",
-        categoria: "",
-        quantidade: "",
-      });
+  
+      if (res.statusCode === 200) {
+        fetchBooks();
+        setBookData({
+          titulo: "",
+          autor: "",
+          isbn: "",
+          categoria: "",
+          quantidade: "",
+        });
+      } else {
+        setError(res.mensagem);
+        console.log(res);
+        setTimeout(() => {
+          setError("");
+        }, 6000);
+      }
     } catch (error) {
-      console.error("Erro ao adicionar livro:", error);
-      alert("Erro ao adicionar livro");
+      console.error("Erro ao registrar o livro:", error);
+      setError("Erro ao registrar o livro. Por favor, tente novamente.");
+      setTimeout(() => {
+        setError("");
+      }, 6000);
     }
   };
+  
 
   const handleLoanInputChange = (e) => {
     const { name, value } = e.target;
@@ -155,11 +178,18 @@ export default function ProfilePage({ isAdmin }) {
     e.preventDefault();
     try {
       const res = await UserService.registerLoan(loanData);
-      console.log(res);
-      fetchBooks();
+
+      if (res.statusCode === 200) {
+        fetchBooks();
+      } else {
+        setError(res.mensagem);
+        console.log(res);
+        setTimeout(() => {
+          setError("");
+        }, 6000);
+      }
     } catch (error) {
-      console.error("Erro ao adicionar empréstimo:", error);
-      alert("Erro ao adicionar empréstimo");
+      console.error("Erro ao registrar o emprestimo:", error);
     }
   };
 
@@ -200,7 +230,7 @@ export default function ProfilePage({ isAdmin }) {
 
   return (
     <main className="h-screen flex flex-col items-center bg-background text-foreground">
-      <div className="w-full h-1/4 bg-gradient-to-b">
+      <div className="w-full h-2/6 bg-gradient-to-b">
         <img
           src="https://images.pexels.com/photos/775998/pexels-photo-775998.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
           alt="Imagem de topo"
@@ -208,101 +238,8 @@ export default function ProfilePage({ isAdmin }) {
         />
       </div>
 
-      {isAdmin && (
-        <Sheet>
-          <SheetTrigger asChild className="mt-12">
-            <Button variant="link" className="text-white">
-              Adicionar Novo Livro
-            </Button>
-          </SheetTrigger>
-          <SheetContent>
-            <SheetHeader>
-              <SheetTitle>Adicionar Livro</SheetTitle>
-              <SheetDescription>
-                Adicione informações do novo livro. Clique em salvar quando
-                terminar.
-              </SheetDescription>
-            </SheetHeader>
-            <form onSubmit={registerNewBook}>
-              <div className="grid gap-4 py-4">
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="titulo" className="text-right">
-                    Título
-                  </Label>
-                  <Input
-                    type="text"
-                    name="titulo"
-                    value={bookData.titulo}
-                    onChange={handleInputChange}
-                  />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="autor" className="text-right">
-                    Autor
-                  </Label>
-                  <Input
-                    type="text"
-                    name="autor"
-                    value={bookData.autor}
-                    onChange={handleInputChange}
-                    className="col-span-3"
-                  />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="isbn" className="text-right">
-                    ISBN
-                  </Label>
-                  <Input
-                    type="number"
-                    name="isbn"
-                    value={bookData.isbn}
-                    onChange={handleInputChange}
-                    className="col-span-3"
-                  />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="categoria" className="text-right">
-                    Categoria
-                  </Label>
-                  <Input
-                    type="text"
-                    name="categoria"
-                    value={bookData.categoria}
-                    onChange={handleInputChange}
-                    className="col-span-3"
-                  />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="quantidade" className="text-right">
-                    Quantidade
-                  </Label>
-                  <Input
-                    type="number"
-                    name="quantidade"
-                    value={bookData.quantidade}
-                    onChange={handleInputChange}
-                    className="col-span-3"
-                  />
-                </div>
-              </div>
-              <SheetFooter>
-                <SheetClose asChild>
-                  <Button
-                    variant="outline"
-                    type="submit"
-                    className="bg-gray-200 text-black"
-                  >
-                    Salvar Alterações
-                  </Button>
-                </SheetClose>
-              </SheetFooter>
-            </form>
-          </SheetContent>
-        </Sheet>
-      )}
-
       <div className="flex mt-12">
-        <div className="w-1/4 p-4 m-4 text-center rounded-md h-2/4 overflow-hidden border bg-background text-slate-200">
+        <div className="w-1/4 p-4 m-4 text-center rounded-md overflow-hidden bg-background text-slate-200">
           <h1 className="text-2xl font-bold mb-4">Livros</h1>
           <p>
             Nesta seção, você encontrará uma ampla seleção de livros. Cada livro
@@ -591,33 +528,139 @@ export default function ProfilePage({ isAdmin }) {
             </Table>
           </div>
 
-          <div className="text-end mt-4 px-4">
-            <span>
-              Página {currentPage} de {totalPages}
-            </span>
-            <Button
-              className="mx-2 text-white"
-              variant="outline"
-              size="icon"
-              disabled={currentPage === 1}
-              onClick={() => handlePageChange(currentPage - 1)}
-            >
-              <ChevronLeft className="h-4 w-4" />
-            </Button>
-
-            <Button
-              className="mx-2 text-white"
-              variant="outline"
-              size="icon"
-              disabled={currentPage === totalPages}
-              onClick={() => handlePageChange(currentPage + 1)}
-            >
-              <ChevronRight className="h-4 w-4" />
-            </Button>
+          <div className="flex justify-between items-center w-full">
+            <div className="ml-2 flex-auto">
+              {isAdmin && (
+                <Sheet>
+                  <SheetTrigger asChild>
+                    <Button variant="ghost" className="text-black">
+                      Adicionar Novo Livro
+                    </Button>
+                  </SheetTrigger>
+                  <SheetContent>
+                    <SheetHeader>
+                      <SheetTitle>Adicionar Livro</SheetTitle>
+                      <SheetDescription>
+                        Adicione informações do novo livro. Clique em salvar
+                        quando terminar.
+                      </SheetDescription>
+                    </SheetHeader>
+                    <form onSubmit={registerNewBook}>
+                      <div className="grid gap-4 py-4">
+                        <div className="grid grid-cols-4 items-center gap-4">
+                          <Label htmlFor="titulo" className="text-right">
+                            Título
+                          </Label>
+                          <Input
+                            type="text"
+                            name="titulo"
+                            value={bookData.titulo}
+                            onChange={handleInputChange}
+                            className="col-span-3"
+                            required
+                          />
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
+                          <Label htmlFor="autor" className="text-right">
+                            Autor
+                          </Label>
+                          <Input
+                            type="text"
+                            name="autor"
+                            value={bookData.autor}
+                            onChange={handleInputChange}
+                            className="col-span-3"
+                            required
+                          />
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
+                          <Label htmlFor="isbn" className="text-right">
+                            ISBN
+                          </Label>
+                          <Input
+                            type="number"
+                            name="isbn"
+                            value={bookData.isbn}
+                            onChange={handleInputChange}
+                            className="col-span-3"
+                            required
+                          />
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
+                          <Label htmlFor="categoria" className="text-right">
+                            Categoria
+                          </Label>
+                          <Input
+                            type="text"
+                            name="categoria"
+                            value={bookData.categoria}
+                            onChange={handleInputChange}
+                            className="col-span-3"
+                            required
+                          />
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
+                          <Label htmlFor="quantidade" className="text-right">
+                            Quantidade
+                          </Label>
+                          <Input
+                            type="number"
+                            name="quantidade"
+                            value={bookData.quantidade}
+                            onChange={handleInputChange}
+                            className="col-span-3"
+                            required
+                          />
+                        </div>
+                      </div>
+                      <SheetFooter>
+                        <SheetClose asChild>
+                          <Button
+                            variant="outline"
+                            type="submit"
+                            className="bg-gray-200 text-black"
+                          >
+                            Salvar Alterações
+                          </Button>
+                        </SheetClose>
+                      </SheetFooter>
+                    </form>
+                  </SheetContent>
+                </Sheet>
+              )}
+            </div>
+            <div className="flex items-center">
+              <span className="mr-2">
+                Página {currentPage} de {totalPages}
+              </span>
+              <Button
+                className="mx-2 text-white"
+                variant="outline"
+                size="icon"
+                disabled={currentPage === 1}
+                onClick={() => handlePageChange(currentPage - 1)}
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </Button>
+              <Button
+                className="mx-2 text-white"
+                variant="outline"
+                size="icon"
+                disabled={currentPage === totalPages}
+                onClick={() => handlePageChange(currentPage + 1)}
+              >
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+            </div>
           </div>
         </div>
         <div className="w-1/4 p-4 text-center bg-background text-foreground">
-          <p>Texto ao lado direito da tabela</p>
+          {error && (
+            <Alert>
+              <AlertTitle>Erro</AlertTitle>
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          )}
         </div>
       </div>
     </main>

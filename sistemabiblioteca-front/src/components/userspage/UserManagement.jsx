@@ -137,7 +137,15 @@ export default function UserManagement() {
   };
 
   return (
-    <main className="h-screen flex justify-center items-center">
+    <main className="h-screen flex flex-col bg-background text-foreground">
+      <div className="w-full h-2/6 bg-gradient-to-b">
+        <img
+          src="https://images.pexels.com/photos/990432/pexels-photo-990432.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+          alt="Imagem de topo"
+          className="w-full h-full object-cover saturate-50 backdrop-saturate-200 shadow-xl shadow-gray-900"
+        />
+      </div>
+
       <div className="flex">
         <div className="w-full m-24 text-center rounded-md overflow-hidden border bg-background text-slate-200">
           <Table className="shadow-md mx-auto table-fixed w-full rounded-lg">

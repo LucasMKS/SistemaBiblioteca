@@ -75,6 +75,7 @@ dist-ssr
 hs_err_pid*
 replay_pid*
 
+*.vscode
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json

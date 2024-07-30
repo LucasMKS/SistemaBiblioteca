@@ -44,7 +44,7 @@ public class LoanService {
             int quantidadeDisponivel = verificarQuantidadeDisponivel(registrationRequest.getIsbn());
             if (quantidadeDisponivel <= 0) {
                 resp.setStatusCode(400); // Indica um erro de requisição
-                resp.setError("Erro ao registrar empréstimo: Nenhum exemplar disponível.");
+                resp.setMensagem("Erro ao registrar empréstimo: Nenhum exemplar disponível.");
                 return resp;
             }
 
@@ -52,7 +52,7 @@ public class LoanService {
             if (alunoPossuiEmprestimoAtivo(registrationRequest.getAlunoMatricula(), registrationRequest.getIsbn(),
                     registrationRequest.getStatus())) {
                 resp.setStatusCode(400); // Indica um erro de requisição
-                resp.setError(
+                resp.setMensagem(
                         "Erro ao registrar empréstimo: O aluno já possui um exemplar com o mesmo ISBN emprestado.");
                 return resp;
             }
@@ -60,7 +60,7 @@ public class LoanService {
             if (alunoPossuiEmprestimoAtivo(registrationRequest.getAlunoMatricula(), registrationRequest.getIsbn(),
                     !registrationRequest.getStatus())) {
                 resp.setStatusCode(400); // Indica um erro de requisição
-                resp.setError(
+                resp.setMensagem(
                         "Erro ao registrar empréstimo: O aluno já possui um exemplar com o mesmo ISBN emprestado.");
                 return resp;
             }

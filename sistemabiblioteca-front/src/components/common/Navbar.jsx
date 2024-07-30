@@ -4,10 +4,11 @@ import { Button } from '../ui/button';
 import { User } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '../ui/dropdown-menu';
+import logoImg from "../../assets/logo.png";
 
 const navigation = [
     { name: 'Livros', href: '/books', current: true, requiresAuth: true },
-    { name: 'Gerenciar usuários', href: '/user-management', current: false, requiresAdmin: true }
+    { name: 'Usuários', href: '/user-management', current: false, requiresAdmin: true }
 ];
 
 function classNames(...classes) {
@@ -26,20 +27,17 @@ export default function Navbar({ isAuthenticated, isAdmin, onLogout }) {
       };
 
     return (
-        <header className="sticky top-0 z-50 w-full border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <header className="fixed top-0 z-50 w-full border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
             <div className="mx-auto w-full max-w-7xl px-2">
                 <div className="flex h-14 items-center justify-between">
-                    <Link href="#" className="flex items-center" prefetch={false}>
-                        TESTE ICON
-                        <span className="sr-only">Acme Inc</span>
-                    </Link>
+                    <img src={logoImg} className="flex items-center w-28" alt="Sistema Bibliotecario" />
                     <nav className='hidden md:flex gap-4'>
                         <div className="hidden sm:ml-6 sm:flex space-x-4">
                             {navigation.map((item) => (
                                 (!item.requiresAuth || (item.requiresAuth && isAuthenticated)) &&
                                 (!item.requiresAdmin || (item.requiresAdmin && isAdmin)) && (
-                                    <Link key={item.name} to={item.href} className={classNames(item.current ? 'bg-primary text-white' : 'text-gray-300 bg-accent',
-                                        'rounded-md px-3 py-2 text-sm font-medium')}
+                                    <Link key={item.name} to={item.href} className={classNames(item.current ? ' text-white' : 'text-gray-300 ',
+                                        'relative rounded-md px-3 py-2 text-sm font-medium after:absolute after:bottom-0 after:left-0 after:w-full after:h-[2px] after:bg-current after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300')}
                                         aria-current={item.current ? 'page' : undefined} >
                                         {item.name}
                                     </Link>

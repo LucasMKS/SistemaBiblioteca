@@ -34,7 +34,7 @@ public class BookService {
 
         }catch (Exception e){
             resp.setStatusCode(500);
-            resp.setError(e.getMessage());
+            resp.setMensagem(e.getMessage());
         }
         return resp;
     }
