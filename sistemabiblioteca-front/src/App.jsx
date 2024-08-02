@@ -22,7 +22,7 @@ function MainApp({ isAuthenticated, isAdmin, onLogin, onLogout }) {
           <Route exact path="/" element={<LoginPage onLogin={onLogin} />} />
           <Route exact path="/login" element={<LoginPage onLogin={onLogin} />} />
           <Route path="/books" element={isAuthenticated ? <BooksPage isAdmin={isAdmin} /> : <Navigate to="/login" />} />
-          <Route path="/profile" element={isAuthenticated ? <ProfilePage /> : <Navigate to="/login" />} />
+          <Route path="/profile" element={isAuthenticated ? <ProfilePage onLogout={onLogout} /> : <Navigate to="/login" />} />
           {isAdmin && (
             <>
               <Route path="/user-management" element={<UserManagement />} />
@@ -57,11 +57,11 @@ export default function App() {
 
   return (
     <BrowserRouter>
-      <MainApp 
-        isAuthenticated={isAuthenticated} 
-        isAdmin={isAdmin} 
-        onLogin={handleLogin} 
-        onLogout={handleLogout} 
+      <MainApp
+        isAuthenticated={isAuthenticated}
+        isAdmin={isAdmin}
+        onLogin={handleLogin}
+        onLogout={handleLogout}
       />
     </BrowserRouter>
   );

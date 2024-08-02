@@ -17,14 +17,11 @@ function classNames(...classes) {
 
 export default function Navbar({ isAuthenticated, isAdmin, onLogout }) {
     const navigate = useNavigate();
-    
+
     const handleLogout = () => {
-        const confirmLogout = true;
-        if (confirmLogout) {
-          onLogout();
-          navigate('/login');
-        }
-      };
+        onLogout();
+        navigate('/login');
+    };
 
     return (
         <header className="fixed top-0 z-50 w-full border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -32,6 +29,7 @@ export default function Navbar({ isAuthenticated, isAdmin, onLogout }) {
                 <div className="flex h-14 items-center justify-between">
                     <img src={logoImg} className="flex items-center w-28" alt="Sistema Bibliotecario" />
                     <nav className='hidden md:flex gap-4'>
+                        {/* Ação Livros / Usuários */}
                         <div className="hidden sm:ml-6 sm:flex space-x-4">
                             {navigation.map((item) => (
                                 (!item.requiresAuth || (item.requiresAuth && isAuthenticated)) &&
@@ -43,9 +41,9 @@ export default function Navbar({ isAuthenticated, isAdmin, onLogout }) {
                                     </Link>
                                 )
                             ))}
-
                         </div>
                     </nav>
+                    {/* Ação Menu */}
                     <DropdownMenu>
                         <DropdownMenuTrigger className="focus:outline-none focus:ring-0"><Button variant="secondary">Menu</Button></DropdownMenuTrigger>
                         <DropdownMenuContent className="w-40 text-white">
@@ -61,11 +59,9 @@ export default function Navbar({ isAuthenticated, isAdmin, onLogout }) {
                                 <Link className="ml-6" onClick={handleLogout}>Sair</Link>
                             </DropdownMenuGroup>
                         </DropdownMenuContent>
-                        </DropdownMenu>
+                    </DropdownMenu>
                 </div>
             </div>
-            
         </header>
-
     );
 }

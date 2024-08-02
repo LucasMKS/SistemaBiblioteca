@@ -20,7 +20,6 @@ class UserService {
       throw err;
     }
   }
-  
 
   static async getAllUsers(token) {
     try {
@@ -73,6 +72,18 @@ class UserService {
   static async updateUser(userId, userData, token) {
     try {
       const response = await axios.put(`${UserService.BASE_URL}/admin/update/${userId}`, userData,
+        {
+          headers: { Authorization: `Bearer ${token}` }
+        })
+      return response.data;
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  static async userUpdateEmail(userId, userData, token) {
+    try {
+      const response = await axios.put(`${UserService.BASE_URL}/adminuser/update/${userId}`, userData,
         {
           headers: { Authorization: `Bearer ${token}` }
         })
@@ -137,6 +148,7 @@ class UserService {
     }
   }
 
+  // Loan Services
   static async registerLoan(loankData) {
     try {
       const response = await axios.post(`${UserService.BASE_URL}/book/register-loan`, loankData)
@@ -166,9 +178,6 @@ class UserService {
       throw err;
     }
   }
-
-  
-
 
   /**AUTHENTICATION CHECKER */
   static logout() {
