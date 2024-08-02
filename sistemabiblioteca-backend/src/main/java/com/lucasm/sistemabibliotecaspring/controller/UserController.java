@@ -46,6 +46,11 @@ public class UserController {
         return ResponseEntity.ok(userService.updateUser(userId, reqres));
     }
 
+    @PutMapping("/adminuser/update/{userId}")
+    public ResponseEntity<ResponseDTO> userUpdateEmail(@PathVariable Integer userId, @RequestBody UserModel reqres){
+        return ResponseEntity.ok(userService.updateUser(userId, reqres));
+    }
+
     @GetMapping("/adminuser/get-profile")
     public ResponseEntity<ResponseDTO> getMyProfile(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
