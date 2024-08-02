@@ -107,11 +107,7 @@ export default function ProfilePage({ onLogout }) {
               {/* Ação Alterar */}
               <Dialog>
                 <DialogTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className="text-white"
-                    onClick={() => handleUpdateClick(profileInfo.id)}
-                  >
+                  <Button variant="outline" className="text-white" onClick={() => handleUpdateClick(profileInfo.id)} >
                     Alterar
                   </Button>
                 </DialogTrigger>
