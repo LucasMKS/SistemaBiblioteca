@@ -38,4 +38,9 @@ public class BookController {
         return ResponseEntity.ok(bookService.deleteBook(bookIsbn));
     }
 
+    @GetMapping("/book/random")
+    public ResponseEntity<BookDTO> getRandomBook(){
+        return ResponseEntity.ok(bookService.getRandomBook());
+    }
+
 }

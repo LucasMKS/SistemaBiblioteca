@@ -15,9 +15,9 @@ public class BookService {
     @Autowired
     private BookRepo bookRepo;
 
-    public BookDTO registerBook(BookDTO registrationRequest){
-        BookDTO resp = new BookDTO();
+    private BookDTO reqRes = new BookDTO();
 
+    public BookDTO registerBook(BookDTO registrationRequest){
         try {
             BookModel ourBook = new BookModel();
             ourBook.setTitulo(registrationRequest.getTitulo());
@@ -27,21 +27,19 @@ public class BookService {
             ourBook.setQuantidade(registrationRequest.getQuantidade());
             BookModel savedBook = bookRepo.save(ourBook);
             if (savedBook.getId()>0) {
-                resp.setBook((savedBook));
-                resp.setMensagem("Livro cadastrado com sucesso");
-                resp.setStatusCode(200);
+                reqRes.setBook((savedBook));
+                reqRes.setMensagem("Livro cadastrado com sucesso");
+                reqRes.setStatusCode(200);
             }
 
         }catch (Exception e){
-            resp.setStatusCode(500);
-            resp.setMensagem(e.getMessage());
+            reqRes.setStatusCode(500);
+            reqRes.setMensagem(e.getMessage());
         }
-        return resp;
+        return reqRes;
     }
 
     public BookDTO getAllBooks() {
-        BookDTO reqRes = new BookDTO();
-
         try {
             List<BookModel> result = bookRepo.findAll();
             if (!result.isEmpty()) {
@@ -61,7 +59,6 @@ public class BookService {
     }
 
     public BookDTO getBookByIsbn(String isbn) {
-        BookDTO reqRes = new BookDTO();
         try {
             BookModel bookByIsbn = bookRepo.findByIsbn(isbn).orElseThrow(() -> new RuntimeException("ISBN não encontrado"));
             reqRes.setBook(bookByIsbn);
@@ -75,7 +72,6 @@ public class BookService {
     }
 
     public BookDTO updateBook(String bookIsbn, BookModel updatedBook) {
-        BookDTO bookRes = new BookDTO();
         try {
             Optional<BookModel> bookOptional = bookRepo.findByIsbn(bookIsbn);
             if (bookOptional.isPresent()) {
@@ -87,22 +83,21 @@ public class BookService {
                 existingBook.setQuantidade(updatedBook.getQuantidade());
 
                 BookModel savedBook = bookRepo.save(existingBook);
-                bookRes.setBook(savedBook);
-                bookRes.setStatusCode(200);
-                bookRes.setMensagem("Livro atualizado");
+                reqRes.setBook(savedBook);
+                reqRes.setStatusCode(200);
+                reqRes.setMensagem("Livro atualizado");
             } else {
-                bookRes.setStatusCode(404);
-                bookRes.setMensagem("Livro não encontrado para atualizar");
+                reqRes.setStatusCode(404);
+                reqRes.setMensagem("Livro não encontrado para atualizar");
             }
         } catch (Exception e) {
-            bookRes.setStatusCode(500);
-            bookRes.setMensagem("Error occurred while updating user: " + e.getMessage());
+            reqRes.setStatusCode(500);
+            reqRes.setMensagem("Error occurred while updating user: " + e.getMessage());
         }
-        return bookRes;
+        return reqRes;
     }
 
     public BookDTO updateBookQuantity(String isbn, int newQuantity) {
-        BookDTO bookRes = new BookDTO();
         try {
             Optional<BookModel> bookOptional = bookRepo.findByIsbn(isbn);
             if (bookOptional.isPresent()) {
@@ -113,38 +108,54 @@ public class BookService {
                 existingBook.setQuantidade(String.valueOf(newQuantity));
 
                 BookModel savedBook = bookRepo.save(existingBook);
-                bookRes.setBook(savedBook);
-                bookRes.setStatusCode(200);
-                bookRes.setMensagem("Quantidade do livro atualizada");
+                reqRes.setBook(savedBook);
+                reqRes.setStatusCode(200);
+                reqRes.setMensagem("Quantidade do livro atualizada");
             } else {
-                bookRes.setStatusCode(404);
-                bookRes.setMensagem("Livro não encontrado para atualizar a quantidade");
+                reqRes.setStatusCode(404);
+                reqRes.setMensagem("Livro não encontrado para atualizar a quantidade");
             }
         } catch (Exception e) {
-            bookRes.setStatusCode(500);
-            bookRes.setMensagem("Error occurred while updating book quantity: " + e.getMessage());
+            reqRes.setStatusCode(500);
+            reqRes.setMensagem("Error occurred while updating book quantity: " + e.getMessage());
         }
-        return bookRes;
+        return reqRes;
     }
 
     public BookDTO deleteBook(String isbn) {
-        BookDTO bookRes = new BookDTO();
         try {
             Optional<BookModel> bookOptional = bookRepo.findByIsbn(isbn);
             if (bookOptional.isPresent()) {
                 bookRepo.deleteByIsbn(isbn);
-                bookRes.setStatusCode(200);
-                bookRes.setMensagem("Livro deletado");
+                reqRes.setStatusCode(200);
+                reqRes.setMensagem("Livro deletado");
             } else {
-                bookRes.setStatusCode(404);
-                bookRes.setMensagem("Livro não encontrado para deletar");
+                reqRes.setStatusCode(404);
+                reqRes.setMensagem("Livro não encontrado para deletar");
             }
         } catch (Exception e) {
-            bookRes.setStatusCode(500);
-            bookRes.setMensagem("Error occurred while deleting user: " + e.getMessage());
+            reqRes.setStatusCode(500);
+            reqRes.setMensagem("Error occurred while deleting user: " + e.getMessage());
         }
-        return bookRes;
+        return reqRes;
     }
 
+    public BookDTO getRandomBook() {
+        try {
+            Optional<BookModel> result = bookRepo.findRandomLivro();
+            if (result.isPresent()) {
+                reqRes.setBook(result.get());
+                reqRes.setStatusCode(200);
+                reqRes.setMensagem("Sucesso");
+            } else {
+                reqRes.setStatusCode(404);
+                reqRes.setMensagem("Nenhum livro encontrado");
+            }
+        } catch (Exception e) {
+            reqRes.setStatusCode(500);
+            reqRes.setMensagem("Error occurred: " + e.getMessage());
+        }
+        return reqRes;
+    }
 
 }
