@@ -1,8 +1,8 @@
 @tailwind base;
-  @tailwind components;
-  @tailwind utilities;
+@tailwind components;
+@tailwind utilities;
 
-  
+
 @layer base {
   :root {
     --font-family-ubuntu: "Ubuntu", sans-serif;
@@ -15,7 +15,8 @@
     --card: 224 71.4% 4.1%;
     --card-foreground: 210 20% 98%;
     --popover: 224 71.4% 4.1%;
-    --popover-foreground: 240 11.1% 4.1%; /* BLACK */
+    --popover-foreground: 240 11.1% 4.1%;
+    /* BLACK */
     --primary: 263.4 70% 50.4%;
     --primary-foreground: 210 20% 98%;
     --secondary: 215 27.9% 16.9%;
@@ -29,6 +30,54 @@
     --border: 215 27.9% 16.9%;
     --input: 215 27.9% 16.9%;
     --ring: 263.4 70% 50.4%;
+    --primary-mi: 259, 94%, 86%;
+    --onPrimary-mi: 259, 42%, 26%;
+    --primaryContainer-mi: 258, 31%, 35%;
+    --onPrimaryContainer-mi: 263, 100%, 93%;
+    --secondary-mi: 264, 26%, 81%;
+    --onSecondary-mi: 258, 18%, 22%;
+    --secondaryContainer-mi: 260, 14%, 30%;
+    --onSecondaryContainer-mi: 265, 65%, 92%;
+    --tertiary-mi: 345, 65%, 83%;
+    --onTertiary-mi: 341, 33%, 22%;
+    --tertiaryContainer-mi: 342, 26%, 31%;
+    --onTertiaryContainer-mi: 346, 100%, 93%;
+    --error-mi: 6, 100%, 84%;
+    --onError-mi: 357, 100%, 21%;
+    --errorContainer-mi: 356, 100%, 29%;
+    --onErrorContainer-mi: 6, 100%, 92%;
+    --background-mi: 260, 19%, 6%;
+    --onBackground-mi: 293, 15%, 89%;
+    --surface-mi: 260, 14%, 8%;
+    --onSurface-mi: 293, 15%, 89%;
+    --surfaceVariant-mi: 267, 6%, 29%;
+    --onSurfaceVariant-mi: 278, 10%, 79%;
+    --outline-mi: 270, 5%, 58%;
+    --outlineVariant-mi: 267, 6%, 29%;
+    --shadow-mi: 0, 0%, 0%;
+    --scrim-mi: 0, 0%, 0%;
+    --inverseSurface-mi: 293, 15%, 89%;
+    --inverseOnSurface-mi: 270, 6%, 20%;
+    --inversePrimary-mi: 258, 25%, 45%;
+    --primaryFixed-mi: 263, 100%, 93%;
+    --onPrimaryFixed-mi: 261, 65%, 17%;
+    --primaryFixedDim-mi: 259, 94%, 86%;
+    --onPrimaryFixedVariant-mi: 258, 31%, 35%;
+    --secondaryFixed-mi: 265, 65%, 92%;
+    --onSecondaryFixed-mi: 257, 26%, 13%;
+    --secondaryFixedDim-mi: 264, 26%, 81%;
+    --onSecondaryFixedVariant-mi: 260, 14%, 30%;
+    --tertiaryFixed-mi: 346, 100%, 93%;
+    --onTertiaryFixed-mi: 338, 51%, 13%;
+    --tertiaryFixedDim-mi: 345, 65%, 83%;
+    --onTertiaryFixedVariant-mi: 342, 26%, 31%;
+    --surfaceDim-mi: 258, 16%, 10%;
+    --surfaceBright-mi: 258, 16%, 12%;
+    --surfaceContainerLowest-mi: 258, 18%, 32%;
+    --surfaceContainerLow-mi: 264, 8%, 12%;
+    --surfaceContainer-mi: 264, 7%, 13%;
+    --surfaceContainerHigh-mi: 260, 7%, 17%;
+    --surfaceContainerHighest-mi: 266 57% 16%;
     --radius: 0.5rem;
   }
 
@@ -38,7 +87,8 @@
     --card: 0 0% 100%;
     --card-foreground: 224 71.1% 4.1%;
     --popover: 0 0% 100%;
-    --popover-foreground: 240 10.1% 4.1%; /* BLACK */
+    --popover-foreground: 240 10.1% 4.1%;
+    /* BLACK */
     --primary: 262.1 83.3% 57.8%;
     --primary-foreground: 210 20% 98%;
     --secondary: 220 14.3% 95.9%;
@@ -55,11 +105,12 @@
   }
 }
 
-  @layer base {
-    * {
-      @apply border-border;
-    }
-    body {
-      @apply bg-background text-foreground;
-    }
+@layer base {
+  * {
+    @apply border-border;
   }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
