@@ -6,13 +6,21 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ChevronRight, ChevronLeft } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableFooter } from "@/components/ui/table";
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import bookbanner from "../../assets/bookbanner.png";
 
 export default function ProfilePage({ isAdmin }) {
-
   const [BooksList, setBooksList] = useState([]);
+
+  const [bookRandom, setBookRandom] = useState({
+    titulo: "",
+    autor: "",
+    isbn: "",
+    categoria: "",
+    quantidade: "",
+  });
   const [bookData, setBookData] = useState({
     titulo: "",
     autor: "",
@@ -26,6 +34,16 @@ export default function ProfilePage({ isAdmin }) {
     status: "true",
   });
 
+  const limparCampos = () => {
+    setBookData({
+      titulo: "",
+      autor: "",
+      isbn: "",
+      categoria: "",
+      quantidade: "",
+    });
+  };
+
   const [currentPage, setCurrentPage] = useState(1);
   const [booksPerPage] = useState(5);
   const { bookIsbn } = useParams();
@@ -34,6 +52,7 @@ export default function ProfilePage({ isAdmin }) {
   useEffect(() => {
     fetchLoanMatricula();
     fetchBooks();
+    getRandomBook();
   }, []);
 
   useEffect(() => {
@@ -82,8 +101,8 @@ export default function ProfilePage({ isAdmin }) {
       const response = await UserService.getAllBooks();
       setBooksList(response.ourBookList || []);
     } catch (error) {
-      console.error("Erro ao buscar livros:", error);
-      setError("Erro ao buscar livros");
+      console.error("Erro ao buscar livro:", error);
+      setError("Erro ao buscar livro");
     }
   };
 
@@ -95,6 +114,16 @@ export default function ProfilePage({ isAdmin }) {
       setBookData({ titulo, autor, isbn, categoria, quantidade });
     } catch (error) {
       console.error("Erro ao buscar dados do livro:", error);
+    }
+  };
+
+  const getRandomBook = async () => {
+    try {
+      const response = await UserService.getRandomBook();
+      console.log(response);
+      setBookRandom(response.book);
+    } catch (error) {
+      console.error("Erro ao buscar livro aleatório:", error);
     }
   };
 
@@ -125,13 +154,7 @@ export default function ProfilePage({ isAdmin }) {
       const res = await UserService.registerBook(bookData, token);
       if (res.statusCode === 200) {
         fetchBooks();
-        setBookData({
-          titulo: "",
-          autor: "",
-          isbn: "",
-          categoria: "",
-          quantidade: "",
-        });
+        limparCampos();
       } else {
         setError(res.mensagem);
         console.log(res);
@@ -195,40 +218,41 @@ export default function ProfilePage({ isAdmin }) {
   };
 
   return (
-    <main className="h-screen flex flex-col items-center bg-background text-foreground">
-      <div className="w-full h-2/6 bg-gradient-to-b">
+    <main className="h-screen flex flex-col items-center bg-backgroundmi text-foreground">
+      <div className="w-full h-0 pb-[15%] relative bg-gradient-to-b">
         <img
-          src="https://images.pexels.com/photos/775998/pexels-photo-775998.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+          src={bookbanner}
           alt="Imagem de topo"
-          className="w-full h-full object-cover saturate-50 backdrop-saturate-200 shadow-xl shadow-gray-900"
+          className="absolute top-0 left-0 w-full h-full object-cover saturate-50 shadow-xl shadow-gray-900"
         />
       </div>
-      <div className="flex mt-12">
-        {/* Descrição dos Livros */}
-        <div className="w-1/4 p-4 m-4 text-center rounded-md overflow-hidden bg-background text-slate-200">
-          <h1 className="text-2xl font-bold mb-4">Livros</h1>
-          <p>
-            Nesta seção, você encontrará uma ampla seleção de livros. Cada livro é apresentado com informações detalhadas, incluindo título, autor, ISBN, categoria e quantidade disponível.
+
+      <div className="flex mt-12 w-full">
+        {/* Descrição dos livro */}
+        <aside className="w-1/6 p-4 m-4 h-2/4 text-center rounded-md bg-surface text-slate-200 shadow-md shadow-surfaceDim">
+          <h1 className="mb-4 font-rubik text-3xl">LIBRISYS</h1>
+          <p className="font-karla">
+            Librisys é um sistema de biblioteca desenvolvido para facilitar a visualização de livros e a gestão de empréstimos.
           </p>
-        </div>
-        {/* Tabela de Livros */}
-        <div className="w-full pb-2 rounded-md overflow-hidden border bg-secondary-foreground text-black">
-          <div className="overflow-x-auto">
-            <Table className="shadow-md table-fixed w-full rounded-lg">
+        </aside>
+        {/* Tabela de livro */}
+        <div className="flex-1 p-4">
+          <div className="overflow-x-auto  rounded-md shadow-md shadow-surfaceDim">
+            <Table className="table-fixed">
               <TableHeader>
-                <TableRow>
-                  <TableHead className="text-center text-black" style={{ width: "13%" }}>Título</TableHead>
-                  <TableHead className="text-center text-black" style={{ width: "13%" }}>Autor</TableHead>
-                  <TableHead className="text-center text-black" style={{ width: "10%" }}>Categoria</TableHead>
-                  <TableHead className="text-center text-black" style={{ width: "10%" }}>ISBN</TableHead>
-                  <TableHead className="text-center text-black" style={{ width: "8%" }}>Quantidade</TableHead>
-                  <TableHead className="text-center text-black" style={{ width: "18%" }}>Ações</TableHead>
+                <TableRow className="uppercase bg-surfaceDim hover:bg-surfaceDim">
+                  <TableHead className="text-center" style={{ width: "13%" }}>Título</TableHead>
+                  <TableHead className="text-center" style={{ width: "13%" }}>Autor</TableHead>
+                  <TableHead className="text-center" style={{ width: "10%" }}>Categoria</TableHead>
+                  <TableHead className="text-center" style={{ width: "10%" }}>ISBN</TableHead>
+                  <TableHead className="text-center" style={{ width: "8%" }}>Quantidade</TableHead>
+                  <TableHead className="text-center" style={{ width: "18%" }}>Ações</TableHead>
                 </TableRow>
               </TableHeader>
-              <TableBody>
+              <TableBody className="bg-surfaceDim-foreground ">
                 {currentBooks.length > 0 ? (
                   currentBooks.map((book) => (
-                    <TableRow key={book.id}>
+                    <TableRow key={book.id} className="hover:bg-surfaceDim">
                       <TableCell className="text-center">{book.titulo}</TableCell>
                       <TableCell className="text-center">{book.autor}</TableCell>
                       <TableCell className="text-center">{book.categoria}</TableCell>
@@ -238,7 +262,7 @@ export default function ProfilePage({ isAdmin }) {
                       <TableCell className="text-center flex justify-center space-x-2">
                         <Dialog>
                           <DialogTrigger asChild>
-                            <Button variant="outline" className="text-white" onClick={() => handleUpdateClick(book.isbn)}>
+                            <Button variant="outline" className="text-white bg-surface" onClick={() => handleUpdateClick(book.isbn)}>
                               Empréstimo
                             </Button>
                           </DialogTrigger>
@@ -277,13 +301,13 @@ export default function ProfilePage({ isAdmin }) {
                           <>
                             <Sheet>
                               <SheetTrigger asChild>
-                                <Button variant="outline" className="text-white" onClick={() => handleUpdateClick(book.isbn)}>
+                                <Button variant="outline" className="text-white bg-surface" onClick={() => handleUpdateClick(book.isbn)}>
                                   Alterar
                                 </Button>
                               </SheetTrigger>
                               <SheetContent>
                                 <SheetHeader>
-                                  <SheetTitle>Editar Livro</SheetTitle>
+                                  <SheetTitle>Editar livro</SheetTitle>
                                   <SheetDescription>
                                     Faça alterações no livro selecionado. Clique em 'Salvar Alterações' quando terminar.
                                   </SheetDescription>
@@ -348,92 +372,112 @@ export default function ProfilePage({ isAdmin }) {
                   </TableRow>
                 )}
               </TableBody>
-            </Table>
-          </div>
-          <div className="flex justify-between items-center w-full">
-            <div className="ml-2 flex-auto">
-              {/* Ação adicionar novo livro admin */}
-              {isAdmin && (
-                <Sheet>
-                  <SheetTrigger asChild>
-                    <Button variant="ghost" className="text-black">
-                      Adicionar Novo Livro
-                    </Button>
-                  </SheetTrigger>
-                  <SheetContent>
-                    <SheetHeader>
-                      <SheetTitle>Adicionar Livro</SheetTitle>
-                      <SheetDescription>
-                        Adicione as informações do novo livro. Clique em salvar quando terminar.
-                      </SheetDescription>
-                    </SheetHeader>
-                    <form onSubmit={registerNewBook}>
-                      <div className="grid gap-4 py-4">
-                        <div className="grid grid-cols-4 items-center gap-4">
-                          <Label htmlFor="titulo" className="text-right">
-                            Título
-                          </Label>
-                          <Input type="text" name="titulo" value={bookData.titulo} onChange={handleInputChange} className="col-span-3" required />
-                        </div>
-                        <div className="grid grid-cols-4 items-center gap-4">
-                          <Label htmlFor="autor" className="text-right">
-                            Autor
-                          </Label>
-                          <Input type="text" name="autor" value={bookData.autor} onChange={handleInputChange} className="col-span-3" required />
-                        </div>
-                        <div className="grid grid-cols-4 items-center gap-4">
-                          <Label htmlFor="isbn" className="text-right">
-                            ISBN
-                          </Label>
-                          <Input type="number" name="isbn" value={bookData.isbn} onChange={handleInputChange} className="col-span-3" required />
-                        </div>
-                        <div className="grid grid-cols-4 items-center gap-4">
-                          <Label htmlFor="categoria" className="text-right">
-                            Categoria
-                          </Label>
-                          <Input type="text" name="categoria" value={bookData.categoria} onChange={handleInputChange} className="col-span-3" required />
-                        </div>
-                        <div className="grid grid-cols-4 items-center gap-4">
-                          <Label htmlFor="quantidade" className="text-right">
-                            Quantidade
-                          </Label>
-                          <Input type="number" name="quantidade" value={bookData.quantidade} onChange={handleInputChange} className="col-span-3" required />
-                        </div>
-                      </div>
-                      <SheetFooter>
-                        <SheetClose asChild>
-                          <Button variant="outline" type="submit" className="bg-gray-200 text-black" >
-                            Salvar Alterações
+              <TableFooter>
+                <TableRow className="bg-surfaceContainerLowest hover:bg-surfaceContainerLowest">
+                  <TableCell colSpan={5}>
+                    {/* Ação adicionar novo livro admin */}
+                    {isAdmin && (
+                      <Sheet>
+                        <SheetTrigger asChild>
+                          <Button className="text-white rounded-xl bg-surfaceDim hover:bg-surfaceDim-foreground" onClick={limparCampos}>
+                            Adicionar livro
                           </Button>
-                        </SheetClose>
-                      </SheetFooter>
-                    </form>
-                  </SheetContent>
-                </Sheet>
-              )}
-            </div>
-            {/* Paginação */}
-            <div className="flex items-center">
-              <span className="mr-2">
-                Página {currentPage} de {totalPages}
-              </span>
-              <Button className="mx-2 text-white" variant="outline" size="icon" disabled={currentPage === 1} onClick={() => handlePageChange(currentPage - 1)} >
-                <ChevronLeft className="h-4 w-4" />
-              </Button>
-              <Button className="mx-2 text-white" variant="outline" size="icon" disabled={currentPage === totalPages} onClick={() => handlePageChange(currentPage + 1)} >
-                <ChevronRight className="h-4 w-4" />
-              </Button>
-            </div>
+                        </SheetTrigger>
+                        <SheetContent>
+                          <SheetHeader>
+                            <SheetTitle>Adicionar livro</SheetTitle>
+                            <SheetDescription>
+                              Adicione as informações do novo livro. Clique em salvar quando terminar.
+                            </SheetDescription>
+                          </SheetHeader>
+                          <form onSubmit={registerNewBook}>
+                            <div className="grid gap-4 py-4">
+                              <div className="grid grid-cols-4 items-center gap-4">
+                                <Label htmlFor="titulo" className="text-right">
+                                  Título
+                                </Label>
+                                <Input type="text" name="titulo" value={bookData.titulo} onChange={handleInputChange} className="col-span-3" required />
+                              </div>
+                              <div className="grid grid-cols-4 items-center gap-4">
+                                <Label htmlFor="autor" className="text-right">
+                                  Autor
+                                </Label>
+                                <Input type="text" name="autor" value={bookData.autor} onChange={handleInputChange} className="col-span-3" required />
+                              </div>
+                              <div className="grid grid-cols-4 items-center gap-4">
+                                <Label htmlFor="isbn" className="text-right">
+                                  ISBN
+                                </Label>
+                                <Input type="number" name="isbn" value={bookData.isbn} onChange={handleInputChange} className="col-span-3" required />
+                              </div>
+                              <div className="grid grid-cols-4 items-center gap-4">
+                                <Label htmlFor="categoria" className="text-right">
+                                  Categoria
+                                </Label>
+                                <Input type="text" name="categoria" value={bookData.categoria} onChange={handleInputChange} className="col-span-3" required />
+                              </div>
+                              <div className="grid grid-cols-4 items-center gap-4">
+                                <Label htmlFor="quantidade" className="text-right">
+                                  Quantidade
+                                </Label>
+                                <Input type="number" name="quantidade" value={bookData.quantidade} onChange={handleInputChange} className="col-span-3" required />
+                              </div>
+                            </div>
+                            <SheetFooter>
+                              <SheetClose asChild>
+                                <Button variant="outline" type="submit" className="bg-gray-200 text-black" >
+                                  Salvar Alterações
+                                </Button>
+                              </SheetClose>
+                            </SheetFooter>
+                          </form>
+                        </SheetContent>
+                      </Sheet>
+                    )}
+                  </TableCell>
+                  <TableCell className="text-right">
+                    {/* Paginação */}
+
+                    <Button className="mx-2 text-white bg-surfaceDim" size="icon" disabled={currentPage === 1} onClick={() => handlePageChange(currentPage - 1)} >
+                      <ChevronLeft className="h-4 w-4" />
+                    </Button>
+                    <span className="m-1 text-base">
+                      {currentPage} / {totalPages}
+                    </span>
+                    <Button className="mx-2 text-white bg-surfaceDim" size="icon" disabled={currentPage === totalPages} onClick={() => handlePageChange(currentPage + 1)} >
+                      <ChevronRight className="h-4 w-4" />
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              </TableFooter>
+            </Table>
           </div>
         </div>
         {/* Caixa de erro */}
-        <div className="w-1/4 p-4 text-center bg-background text-foreground">
-          {error && (
-            <Alert>
-              <AlertTitle>Erro</AlertTitle>
-              <AlertDescription>{error}</AlertDescription>
-            </Alert>
-          )}
+        <div className="flex flex-col w-1/6">
+          <div className="p-4 m-4 h-80 text-center rounded-md overflow-hidden bg-surface shadow-md shadow-surfaceDim text-slate-200">
+              <h1 className="mb-4 font-rubik text-3xl">Sugestão</h1>
+              <div className="flex ml-4 mb-2">
+                <p className="font-bold mr-2">Titulo:</p>
+                <p>{bookRandom.titulo}</p>
+              </div>
+              <div className="flex ml-4 mb-2">
+                <p className="font-bold mr-2">Autor:</p>
+                <p>{bookRandom.autor}</p>
+              </div>
+              <div className="flex ml-4 mb-2">
+                <p className="font-bold mr-2">Categoria:</p>
+                <p>{bookRandom.categoria}</p>
+              </div>
+          </div>
+          <div className="m-4 mt-0 h-4/5 text-center rounded-xl text-slate-200 ">
+            {error && (
+              <Alert className="shadow-md shadow-surfaceDim">
+                <AlertTitle>Erro</AlertTitle>
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
+          </div>
         </div>
       </div>
     </main>

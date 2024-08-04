@@ -136,6 +136,15 @@ class UserService {
     }
   }
 
+  static async getRandomBook() {
+    try {
+      const response = await axios.get(`${UserService.BASE_URL}/book/random`)
+      return response.data;
+    } catch (err) {
+      throw err;
+    }
+  }
+
   static async registerBook(bookData, token) {
     try {
       const response = await axios.post(`${UserService.BASE_URL}/admin/register-book`, bookData,
