@@ -23,8 +23,14 @@ public class BookService {
             ourBook.setTitulo(registrationRequest.getTitulo());
             ourBook.setAutor(registrationRequest.getAutor());
             ourBook.setIsbn(registrationRequest.getIsbn());
-            ourBook.setCategoria(registrationRequest.getCategoria());
             ourBook.setQuantidade(registrationRequest.getQuantidade());
+            ourBook.setAno(registrationRequest.getAno());
+            ourBook.setPaginas(registrationRequest.getPaginas());
+            ourBook.setIdioma(registrationRequest.getIdioma());
+            ourBook.setEditora(registrationRequest.getEditora());
+            ourBook.setRating(registrationRequest.getRating());
+            ourBook.setDescricao(registrationRequest.getDescricao());
+            ourBook.setGenero(registrationRequest.getGenero());
             BookModel savedBook = bookRepo.save(ourBook);
             if (savedBook.getId()>0) {
                 reqRes.setBook((savedBook));
@@ -79,9 +85,14 @@ public class BookService {
                 existingBook.setTitulo(updatedBook.getTitulo());
                 existingBook.setAutor(updatedBook.getAutor());
                 existingBook.setIsbn(updatedBook.getIsbn());
-                existingBook.setCategoria(updatedBook.getCategoria());
                 existingBook.setQuantidade(updatedBook.getQuantidade());
-
+                existingBook.setAno(updatedBook.getAno());
+                existingBook.setPaginas(updatedBook.getPaginas());
+                existingBook.setIdioma(updatedBook.getIdioma());
+                existingBook.setEditora(updatedBook.getEditora());
+                existingBook.setRating(updatedBook.getRating());
+                existingBook.setDescricao(updatedBook.getDescricao());
+                existingBook.setGenero(updatedBook.getGenero());
                 BookModel savedBook = bookRepo.save(existingBook);
                 reqRes.setBook(savedBook);
                 reqRes.setStatusCode(200);

@@ -20,9 +20,16 @@ public class BookDTO {
     private String expirationTime;
     private String titulo;
     private String autor;
-    private String categoria;
+    private String isbn_10;
     private String isbn;
     private String quantidade;
+    private String ano;
+    private String paginas;
+    private String idioma;
+    private String editora;
+    private String rating;
+    private String descricao;
+    private String genero;
     private BookModel book;
     private List<BookModel> ourBookList;
 

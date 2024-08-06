@@ -15,7 +15,14 @@ public class BookModel {
     private String titulo;
     private String autor;
     private String isbn;
-    private String categoria;
+    private String isbn_10;
     private String quantidade;
+    private String ano;
+    private String paginas;
+    private String idioma;
+    private String editora;
+    private String rating;
+    private String descricao;
+    private String genero;
 
 }
