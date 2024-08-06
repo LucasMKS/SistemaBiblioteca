@@ -24,6 +24,7 @@ module.exports = {
         karla: ['var(--font-family-karla)'],
         roboto: ['var(--font-family-roboto)'],
         ubuntu: ['var(--font-family-ubuntu)'],
+        bebas: ['var(--font-family-bebas)'],
       },
       colors: {
         border: "hsl(var(--border))",
