@@ -1,57 +1,29 @@
-# Librisys :books:
+
+# Librasys :books:
 
 :construction: EM CONSTRUÇÃO :construction:
 
-## Sumário
-- [Introdução](#introducao)
-- [Funcionalidades](#funcionalidades)
-- [Tecnologias Utilizadas](#tech)
-- [Como Rodar](#rodar)
+Librasys é um sistema de biblioteca desenvolvido para facilitar a gestão de empréstimos, visualização de livros e gerenciamento de usuários. O sistema é composto por um backend robusto utilizando Spring Boot e um frontend interativo e moderno construído com React.
 
 
-<div id='introducao'/> 
+![Logo](https://i.imgur.com/20MYU8E.png)
 
-## Introdução
-
-Librisys é um sistema de biblioteca desenvolvido para facilitar a gestão de empréstimos, visualização de livros e gerenciamento de usuários. O sistema é composto por um backend robusto utilizando Spring Boot e um frontend interativo e moderno construído com React.
-
-<div id='funcionalidades'/> 
 
 ## Funcionalidades
 
-- Cadastro de Livros: Permite o registro de novos livros com detalhes como título, autor, ISBN, categoria e quantidade disponível.
-- Empréstimos de Livros: Funcionalidade para registrar e gerenciar empréstimos de livros por parte dos usuários.
-- Gerenciamento de Usuários: Cadastro e autenticação de usuários, com funcionalidades específicas para administradores.
+- *Cadastro de Livros*: Permite o registro de novos livros com detalhes como título, autor, ISBN, categoria e quantidade disponível.
+- *Empréstimos de Livros*: Funcionalidade para registrar e gerenciar empréstimos de livros por parte dos usuários.
+- *Gerenciamento de Usuários*: Cadastro e autenticação de usuários, com funcionalidades específicas para administradores.
 
-<div id='tech'/> 
 
-## Tecnologias Utilizadas
+## Stack utilizada
 
-### Frontend
-- React
-- Shadcn/ui
-- Tailwind CSS
+**Front-end:** React, Shadcn/ui, Tailwind CSS
 
-### Backend
-- Spring Boot
-- MySQL
-- Spring Security
+**Back-end:** - Spring Boot, Spring Security, MySQL
 
-### Ferramentas de Desenvolvimento
-- Maven
-- VS Code
-- Postman (para testes de API)
 
-<div id='rodar'/> 
-
-## Como Rodar
-
-### Pré-requisitos
-
-- Node.js
-- Java 11+
-- MySQL
-- Maven
+## Instalação
 
 Passos para rodar o frontend
 1. Clone o repositório:
@@ -88,7 +60,19 @@ spring.datasource.password=sua_senha
 mvn spring-boot:run
 ```
 
-4. Acesse o sistema no navegador:
+## Rodando
+
+Para rodar o front utilize o seguinte comando
+
+```bash
+  npm run dev
 ```
-http://localhost:3000
-```
+
+
+## Autor
+
+- [@LucasMKS](https://www.github.com/LucasMKS)
+
+
+## 🔗 Links
+[![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/lucas-marques-da-silva-23b919232/)
