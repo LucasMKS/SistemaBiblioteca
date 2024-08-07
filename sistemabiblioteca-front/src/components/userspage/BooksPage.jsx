@@ -226,7 +226,7 @@ export default function Book({ isAdmin }) {
 
   return (
     <main className="h-screen flex flex-col items-center text-foreground">
-      <div className="w-full h-0 pb-[12%] relative bg-gradient-to-b">
+      <div className="w-full h-0 pb-[16%] relative bg-gradient-to-b">
         <img
           src={bookbanner}
           alt="Imagem de topo"
@@ -245,13 +245,7 @@ export default function Book({ isAdmin }) {
           {/* Tabela de livro */}
           <div className="flex-1 p-4 ">
             <div className="flex justify-between mb-2">
-              <Input
-                type="text"
-                placeholder="Pesquisar livros / Clique na linha para mais detalhes."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-1/3"
-              />
+              <Input type="text" placeholder="Pesquisar livros" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="w-1/3" />
             </div>
             <div className="overflow-x-auto  rounded-md shadow-md shadow-surfaceDim">
               <Table className="table-fixed">
@@ -551,7 +545,7 @@ export default function Book({ isAdmin }) {
                   <Label htmlFor="descricao" className="text-left">{selectedBook.descricao} </Label>
                 </div>
                 <div className="flex items-center space-x-2 mt-2">
-                  <Label htmlFor="editora" className="text-left text-lg font-bebas">EDITORA:</Label>
+                  <Label htmlFor="editora" className="text-left text-lg font-bebas">Editora:</Label>
                   <Label htmlFor="editora" className="text-left font-medium">{selectedBook.editora} </Label>
                 </div>
                 <div className="flex items-center space-x-2 mt-2">
